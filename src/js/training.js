@@ -1,4 +1,4 @@
-fetch('https://jsonplaceholder.typicode.com/users')
+// fetch('https://jsonplaceholder.typicode.com/users')
 //     .then(res => {
 //         console.log(res);
 //         console.log('Запит успішний');

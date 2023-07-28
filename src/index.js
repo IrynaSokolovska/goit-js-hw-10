@@ -8,9 +8,9 @@ const catInfoEl = document.querySelector('.cat-info');
 
 fetchBreeds(selectEl);
 
-selectEl.addEventListener('input', choosingCatBreed);
+selectEl.addEventListener('input', choiceCatBreed);
 
-function choosingCatBreed(evt) {
+function choiceCatBreed(evt) {
   loaderEl.classList.remove('is-hidden');
   catInfoEl.classList.add('is-hidden');
   fetchCatByBreed(evt.target.value);

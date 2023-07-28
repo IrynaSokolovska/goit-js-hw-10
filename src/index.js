@@ -1,36 +1,53 @@
+// import axios from "axios";
+
+// axios.defaults.headers.common["x-api-key"] = "твій ключ";
 import Notiflix from 'notiflix';
+import SlimSelect from 'slim-select';
 
-import { fetchBreeds, fetchCatByBreed } from './js/cat-api';
+import {fetchBreeds,fetchCatByBreed} from './js/services/cat-api';
 
-import { createMarkup, createCardInfo } from "./js/createmarkup";
+import { creatMarkup, creatMarkupCat } from './js/services/createMarkup';
 
-const loaderEl = document.querySelector('.loader');
-const infoEl = document.querySelector('.cat-info');
-const selectEl = document.getElementById('selectElement');
-selectEl.style.opacity = '0';
+
+import refs from "./js/refs";
+
+
+
+const sel = new SlimSelect({
+  select: '.breed-select'
+});
+
+const { selektEl, catInfo, loaderEl } = refs;
+
 
 fetchBreeds()
-  .then(createMarkup)
+    .then(element =>
+    {sel.setData(creatMarkup(element));
+    catInfo.innerHTML =" "}
+    )
   .catch(error => {
-    Notiflix.Notify.failure(
-      'Oops! Something went wrong! Try reloading the page!'
-    );
-    console.log(error);
+      Notiflix.Notify.failure(
+        'Oops! Something went wrong! Try reloading the page!'
+      );
   });
 
-  selectEl.addEventListener('change', e => {
-  const backgroundEl = document.querySelector('div');
-  backgroundEl.style.opacity = '0';
-  loaderEl.style.opacity = '1';
-  infoEl.innerHTML = '';
-  infoEl.style.cssText = '';
-  fetchCatByBreed(e.target.value)
-    .then(createCardInfo)
+selektEl.addEventListener('change', onSelectCat);
+
+function onSelectCat(e) {
+  const id = e.target.value
+  console.log(id);
+ 
+  loaderEl.classList.remove('js-style');
+  
+  fetchCatByBreed(id).then(data =>
+  // console.log(data))
+    catInfo.innerHTML = (creatMarkupCat(data))
+  )
     .catch(error => {
       Notiflix.Notify.failure(
         'Oops! Something went wrong! Try reloading the page!'
       );
-      console.log(error);
-    });
-});
-
+    })
+    .finally(() => 
+      loaderEl.classList.add('js-style'))  
+};
